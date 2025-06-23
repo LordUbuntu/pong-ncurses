@@ -4,6 +4,7 @@
 #   Play the game Pong in terminal!
 # See:
 #   https://en.wikipedia.org/wiki/Pong
+from math import floor, ceil
 from time import sleep
 from sys import argv
 from os import system
@@ -20,6 +21,7 @@ import curses
 #   - setup project so it's available through PyPI
 #   - publish on itch.io
 # - finished, move on to make ultrapong with pygame or something...
+PADDLE_HEIGHT = 5
 
 
 def pong():
@@ -38,7 +40,6 @@ def pong():
 
         # each round
         while True:
-
             # get input
             key = win.getch()
             # quit on q key
@@ -48,19 +49,19 @@ def pong():
             # move paddle up or down based on input
             #   move player paddle up
             if key == ord('w'):
-                if player_paddle[0] > 2:
+                if player_paddle[0] > PADDLE_HEIGHT - 1:
                     player_paddle[0] -= 1
             #   move player paddle down
             if key == ord('s'):
-                if player_paddle[0] < height - 3:
+                if player_paddle[0] < height - PADDLE_HEIGHT:
                     player_paddle[0] += 1
             #   move opponent paddle up
             if key == ord('i'):
-                if opponent_paddle[0] > 2:
+                if opponent_paddle[0] > PADDLE_HEIGHT - 1:
                     opponent_paddle[0] -= 1
             #   move opponent paddle down
             if key == ord('k'):
-                if opponent_paddle[0] < height - 3:
+                if opponent_paddle[0] < height - PADDLE_HEIGHT:
                     opponent_paddle[0] += 1
 
             # update pong
@@ -72,10 +73,10 @@ def pong():
                 dy = dy * -1
             # bounce against paddles
             #   bounce from player paddle
-            if x == player_paddle[1] and y in [*range(player_paddle[0] - 1, player_paddle[0] + 2)]:
+            if x == player_paddle[1] and y in [*range(player_paddle[0] - floor(PADDLE_HEIGHT / 2), player_paddle[0] + ceil(PADDLE_HEIGHT / 2))]:
                 dx = dx * -1
             #   bounce from opponent paddle
-            if x == opponent_paddle[1] and y in [*range(opponent_paddle[0] - 1, opponent_paddle[0] + 2)]:
+            if x == opponent_paddle[1] and y in [*range(opponent_paddle[0] - floor(PADDLE_HEIGHT / 2), opponent_paddle[0] + ceil(PADDLE_HEIGHT / 2))]:
                 dx = dx * -1
 
             # update scores and start next round when hitting walls
@@ -97,9 +98,9 @@ def pong():
             #   draw ball
             win.addch(int(y), int(x), ord(ball_char), curses.color_pair(ball_color))
             #   draw paddles
-            for player_y in range(player_paddle[0] - 1, player_paddle[0] + 2):
+            for player_y in range(player_paddle[0] - floor(PADDLE_HEIGHT / 2), player_paddle[0] + ceil(PADDLE_HEIGHT / 2)):
                 win.addch(int(player_y), int(player_paddle[1]), ord(paddle_char), curses.color_pair(player_color))
-            for opponent_y in range(opponent_paddle[0] - 1, opponent_paddle[0] + 2):
+            for opponent_y in range(opponent_paddle[0] - floor(PADDLE_HEIGHT / 2), opponent_paddle[0] + ceil(PADDLE_HEIGHT / 2)):
                 win.addch(int(opponent_y), int(opponent_paddle[1]), ord(paddle_char), curses.color_pair(opponent_color))
             #   write scores
             win.addstr(int(height // 2), int(width // 8), "player: {}".format(scores[0]), curses.color_pair(player_color))
