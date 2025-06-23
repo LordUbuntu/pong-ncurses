@@ -11,6 +11,17 @@ from random import choice
 import curses
 
 
+# TODO:
+# - add const variable for paddle height  (before 2025-06-25)
+# - interestingly, logic lets paddles move on x too. Add as feature activated with "--madness-mode" flag  (before 2025-06-25) 
+# - use threads to handle ball and paddle movements as independent events? (otherwise keypresses are blocking and ball speed increases with paddle movement) (look at ncurses arcade project)  (before 2025-06-28)
+# - check it works on other platforms  (before 2025-06-30)
+# - create distributions  (before 2025-06-30)
+#   - setup project so it's available through PyPI
+#   - publish on itch.io
+# - finished, move on to make ultrapong with pygame or something...
+
+
 def pong():
     # [player, opponent]
     scores = [0, 0]
