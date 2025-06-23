@@ -12,8 +12,10 @@ from random import choice
 import curses
 
 
+# DONE:
+# - add const variable for paddle height  (before 2025-06-25, added 2025-06-23)
 # TODO:
-# - add const variable for paddle height  (before 2025-06-25)
+# 
 # - interestingly, logic lets paddles move on x too. Add as feature activated with "--madness-mode" flag  (before 2025-06-25) 
 # - use threads to handle ball and paddle movements as independent events? (otherwise keypresses are blocking and ball speed increases with paddle movement) (look at ncurses arcade project)  (before 2025-06-28)
 # - check it works on other platforms  (before 2025-06-30)
