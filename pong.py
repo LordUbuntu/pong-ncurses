@@ -49,19 +49,19 @@ def pong():
             # move paddle up or down based on input
             #   move player paddle up
             if key == ord('w'):
-                if player_paddle[0] > PADDLE_HEIGHT - 1:
+                if player_paddle[0] > ceil(PADDLE_HEIGHT / 2):
                     player_paddle[0] -= 1
             #   move player paddle down
             if key == ord('s'):
-                if player_paddle[0] < height - PADDLE_HEIGHT:
+                if player_paddle[0] < height - (ceil(PADDLE_HEIGHT / 2) + 1):
                     player_paddle[0] += 1
             #   move opponent paddle up
             if key == ord('i'):
-                if opponent_paddle[0] > PADDLE_HEIGHT - 1:
+                if opponent_paddle[0] > ceil(PADDLE_HEIGHT / 2):
                     opponent_paddle[0] -= 1
             #   move opponent paddle down
             if key == ord('k'):
-                if opponent_paddle[0] < height - PADDLE_HEIGHT:
+                if opponent_paddle[0] < height - (ceil(PADDLE_HEIGHT / 2) + 1):
                     opponent_paddle[0] += 1
 
             # update pong
