@@ -21,13 +21,8 @@ def pong():
         dx = choice([-1, 1])
         dy = choice([-1, 1])
 
-        round = True
-        while round:
-            # render
-            win.clear()
-            win.border()
-            win.addch(int(y), int(x), ord(ball_char), curses.color_pair(ball_color))
-            win.refresh()
+        # each round
+        while True:
 
             # get input
             key = win.getch()
@@ -51,11 +46,24 @@ def pong():
             # for now: just bounce against wall
             if x + dx <= 1 or x + dx >= width - 1:
                 dx = dx * -1
+
             # update scores and start next round when hitting walls
             #   bounce from player paddle
             #   bounce from opponent paddle
             #   if on left wall (player)
             #   if on right wall (opponent)
+            if x <= 1:
+                scores[1] += 1
+                break
+            if x >= width - 1:
+                scores[0] += 1
+                break
+
+            # render
+            win.clear()
+            win.border()
+            win.addch(int(y), int(x), ord(ball_char), curses.color_pair(ball_color))
+            win.refresh()
 
 
 if __name__ == '__main__':
