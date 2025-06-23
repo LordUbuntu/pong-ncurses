@@ -12,6 +12,7 @@ import curses
 
 
 def pong():
+    # [player, opponent]
     scores = [0, 0]
     game = True
     while game:
@@ -35,7 +36,7 @@ def pong():
                 dy = dy * -1
             # bounce against paddle
             # for now: just bounce against wall
-            if x + dx <= 1 or  + dx > width - 1:
+            if x + dx <= 1 or x + dx >= width - 1:
                 dx = dx * -1
             # move paddle up or down based on player input
             # note: a bounce is dx * -1 or dy * -1
