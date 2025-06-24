@@ -9,6 +9,7 @@ from time import sleep
 from sys import argv
 from os import system
 from random import choice
+import argparse
 import curses
 
 
@@ -23,10 +24,13 @@ import curses
 #   - setup project so it's available through PyPI
 #   - publish on itch.io
 # - finished, move on to make ultrapong with pygame or something...
-PADDLE_HEIGHT = 5
 
 
 def pong():
+    # set paddle size
+    PADDLE_HEIGHT = args.paddle if args.paddle else 5
+    if PADDLE_HEIGHT >= height // 4:
+        PADDLE_HEIGHT = height // 4
     # [player, opponent]
     scores = [0, 0]
     game = True
@@ -112,8 +116,15 @@ def pong():
 
 
 if __name__ == '__main__':
-    # get the update interval from the command line
-    speed = int(argv[1]) if len(argv) > 1 else 100
+    parser = argparse.ArgumentParser(
+        prog="PONG",
+        description="An NCurses implementation of the classic game PONG.",
+        epilog="Jacobus Burger (2025)"
+    )
+    parser.add_argument("-m", "--madness", action="store_true", help="madness mode")
+    parser.add_argument("-p", "--paddle", type=int, help="paddle size")
+    parser.add_argument("-s", "--speed", type=int, help="refresh rate")
+    args = parser.parse_args()
 
     # initialize ncurses
     stdscr = curses.initscr()
@@ -139,7 +150,7 @@ if __name__ == '__main__':
     height, width = stdscr.getmaxyx()
     win = curses.newwin(height, width, 0, 0)
     win.keypad(True)
-    win.timeout(speed)
+    win.timeout(args.speed if args.speed else 100)
     win.border()
 
     # play game
