@@ -16,8 +16,8 @@ import curses
 # DONE:
 # - add const variable for paddle height  (before 2025-06-25, added 2025-06-23)
 # - add CLI controls for madness-mode and paddle_height among other things like refresh speed and more.  (before 2025-06-25, added 2025-06-23)
+# - interestingly, logic lets paddles move on x too. Add as feature activated with "--madness" flag  (before 2025-06-25, added 2025-06-23) 
 # TODO:
-# - interestingly, logic lets paddles move on x too. Add as feature activated with "--madness-mode" flag  (before 2025-06-25) 
 # - check it works on other platforms  (before 2025-06-30)
 # - use threads to handle ball and paddle movements as independent events? (otherwise keypresses are blocking and ball speed increases with paddle movement) (look at ncurses arcade project)  (before 2025-06-28)
 # - create distributions  (before 2025-06-30)
@@ -69,6 +69,24 @@ def pong():
             if key == ord('k'):
                 if opponent_paddle[0] < height - (ceil(paddle_height / 2) + 1):
                     opponent_paddle[0] += 1
+            # madness mode: move paddles on x plane too!
+            if args.madness:
+                # move player paddle left
+                if key == ord('a'):
+                    if player_paddle[1] > 1:
+                        player_paddle[1] -= 1
+                # move player paddle right
+                if key == ord('d'):
+                    if player_paddle[1] < width - 1:
+                        player_paddle[1] += 1
+                # move opponent paddle left
+                if key == ord('j'):
+                    if opponent_paddle[1] > 1:
+                        opponent_paddle[1] -= 1
+                # move opponent paddle right
+                if key == ord('l'):
+                    if opponent_paddle[1] < width - 1:
+                        opponent_paddle[1] += 1
 
             # update pong
             #   update ball position
@@ -79,10 +97,10 @@ def pong():
                 dy = dy * -1
             # bounce against paddles
             #   bounce from player paddle
-            if x == player_paddle[1] and y in [*range(player_paddle[0] - floor(paddle_height / 2), player_paddle[0] + ceil(paddle_height / 2))]:
+            if x + dx == player_paddle[1] and y in [*range(player_paddle[0] - floor(paddle_height / 2), player_paddle[0] + ceil(paddle_height / 2))]:
                 dx = dx * -1
             #   bounce from opponent paddle
-            if x == opponent_paddle[1] and y in [*range(opponent_paddle[0] - floor(paddle_height / 2), opponent_paddle[0] + ceil(paddle_height / 2))]:
+            if x + dx == opponent_paddle[1] and y in [*range(opponent_paddle[0] - floor(paddle_height / 2), opponent_paddle[0] + ceil(paddle_height / 2))]:
                 dx = dx * -1
 
             # update scores and start next round when hitting walls
