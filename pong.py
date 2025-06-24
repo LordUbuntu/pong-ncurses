@@ -15,7 +15,7 @@ import curses
 
 # DONE:
 # - add const variable for paddle height  (before 2025-06-25, added 2025-06-23)
-# - add CLI controls for madness-mode and PADDLE_HEIGHT among other things like refresh speed and more.  (before 2025-06-25, added 2025-06-23)
+# - add CLI controls for madness-mode and paddle_height among other things like refresh speed and more.  (before 2025-06-25, added 2025-06-23)
 # TODO:
 # - interestingly, logic lets paddles move on x too. Add as feature activated with "--madness-mode" flag  (before 2025-06-25) 
 # - check it works on other platforms  (before 2025-06-30)
@@ -28,9 +28,9 @@ import curses
 
 def pong():
     # set paddle size
-    PADDLE_HEIGHT = args.paddle if args.paddle else 5
-    if PADDLE_HEIGHT >= height // 4:
-        PADDLE_HEIGHT = height // 4
+    paddle_height = args.paddle if args.paddle else 5
+    if paddle_height >= height // 4:
+        paddle_height = height // 4
     # [player, opponent]
     scores = [0, 0]
     game = True
@@ -55,19 +55,19 @@ def pong():
             # move paddle up or down based on input
             #   move player paddle up
             if key == ord('w'):
-                if player_paddle[0] > ceil(PADDLE_HEIGHT / 2):
+                if player_paddle[0] > ceil(paddle_height / 2):
                     player_paddle[0] -= 1
             #   move player paddle down
             if key == ord('s'):
-                if player_paddle[0] < height - (ceil(PADDLE_HEIGHT / 2) + 1):
+                if player_paddle[0] < height - (ceil(paddle_height / 2) + 1):
                     player_paddle[0] += 1
             #   move opponent paddle up
             if key == ord('i'):
-                if opponent_paddle[0] > ceil(PADDLE_HEIGHT / 2):
+                if opponent_paddle[0] > ceil(paddle_height / 2):
                     opponent_paddle[0] -= 1
             #   move opponent paddle down
             if key == ord('k'):
-                if opponent_paddle[0] < height - (ceil(PADDLE_HEIGHT / 2) + 1):
+                if opponent_paddle[0] < height - (ceil(paddle_height / 2) + 1):
                     opponent_paddle[0] += 1
 
             # update pong
@@ -79,10 +79,10 @@ def pong():
                 dy = dy * -1
             # bounce against paddles
             #   bounce from player paddle
-            if x == player_paddle[1] and y in [*range(player_paddle[0] - floor(PADDLE_HEIGHT / 2), player_paddle[0] + ceil(PADDLE_HEIGHT / 2))]:
+            if x == player_paddle[1] and y in [*range(player_paddle[0] - floor(paddle_height / 2), player_paddle[0] + ceil(paddle_height / 2))]:
                 dx = dx * -1
             #   bounce from opponent paddle
-            if x == opponent_paddle[1] and y in [*range(opponent_paddle[0] - floor(PADDLE_HEIGHT / 2), opponent_paddle[0] + ceil(PADDLE_HEIGHT / 2))]:
+            if x == opponent_paddle[1] and y in [*range(opponent_paddle[0] - floor(paddle_height / 2), opponent_paddle[0] + ceil(paddle_height / 2))]:
                 dx = dx * -1
 
             # update scores and start next round when hitting walls
@@ -104,9 +104,9 @@ def pong():
             #   draw ball
             win.addch(int(y), int(x), ord(ball_char), curses.color_pair(ball_color))
             #   draw paddles
-            for player_y in range(player_paddle[0] - floor(PADDLE_HEIGHT / 2), player_paddle[0] + ceil(PADDLE_HEIGHT / 2)):
+            for player_y in range(player_paddle[0] - floor(paddle_height / 2), player_paddle[0] + ceil(paddle_height / 2)):
                 win.addch(int(player_y), int(player_paddle[1]), ord(paddle_char), curses.color_pair(player_color))
-            for opponent_y in range(opponent_paddle[0] - floor(PADDLE_HEIGHT / 2), opponent_paddle[0] + ceil(PADDLE_HEIGHT / 2)):
+            for opponent_y in range(opponent_paddle[0] - floor(paddle_height / 2), opponent_paddle[0] + ceil(paddle_height / 2)):
                 win.addch(int(opponent_y), int(opponent_paddle[1]), ord(paddle_char), curses.color_pair(opponent_color))
             #   write scores
             win.addstr(int(height // 2), int(width // 8), "player: {}".format(scores[0]), curses.color_pair(player_color))
