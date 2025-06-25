@@ -136,6 +136,7 @@ def pong():
 
 
 if __name__ == '__main__':
+    # parse input of CLI
     parser = argparse.ArgumentParser(
         prog="PONG",
         description="An NCurses implementation of the classic game PONG.",
@@ -145,6 +146,12 @@ if __name__ == '__main__':
     parser.add_argument("-p", "--paddle", type=int, help="paddle size")
     parser.add_argument("-s", "--speed", type=int, help="refresh rate")
     args = parser.parse_args()
+
+    # begin threads
+    player_input_thread = threading.Event()
+    opponent_input_thread = threading.Event()
+    # TODO:
+    # - multithreading is difficult, I'll do this later maybe
 
     # initialize ncurses
     stdscr = curses.initscr()
