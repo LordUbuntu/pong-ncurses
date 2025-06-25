@@ -5,12 +5,14 @@
 # See:
 #   https://en.wikipedia.org/wiki/Pong
 from math import floor, ceil
-from time import sleep
-from sys import argv
 from os import system
 from random import choice
+from sys import argv
+import threading
+from time import sleep
 import argparse
 import curses
+
 
 
 # DONE:
