@@ -8,7 +8,6 @@ from math import floor, ceil
 from os import system
 from random import choice
 from sys import argv
-import threading
 from time import sleep
 import argparse
 import curses
@@ -21,7 +20,6 @@ import curses
 # - interestingly, logic lets paddles move on x too. Add as feature activated with "--madness" flag  (before 2025-06-25, added 2025-06-23) 
 # TODO:
 # - check it works on other platforms  (before 2025-06-30)
-# - use threads to handle ball and paddle movements as independent events? (otherwise keypresses are blocking and ball speed increases with paddle movement) (look at ncurses arcade project)  (before 2025-06-28)
 # - create distributions  (before 2025-06-30)
 #   - setup project so it's available through PyPI
 #   - publish on itch.io
@@ -146,12 +144,6 @@ if __name__ == '__main__':
     parser.add_argument("-p", "--paddle", type=int, help="paddle size")
     parser.add_argument("-s", "--speed", type=int, help="refresh rate")
     args = parser.parse_args()
-
-    # begin threads
-    player_input_thread = threading.Event()
-    opponent_input_thread = threading.Event()
-    # TODO:
-    # - multithreading is difficult, I'll do this later maybe
 
     # initialize ncurses
     stdscr = curses.initscr()
