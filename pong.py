@@ -18,8 +18,8 @@ import curses
 # - add const variable for paddle height  (before 2025-06-25, added 2025-06-23)
 # - add CLI controls for madness-mode and paddle_height among other things like refresh speed and more.  (before 2025-06-25, added 2025-06-23)
 # - interestingly, logic lets paddles move on x too. Add as feature activated with "--madness" flag  (before 2025-06-25, added 2025-06-23) 
+# - check it works on other platforms  (before 2025-06-30, done 2025-06-25)
 # TODO:
-# - check it works on other platforms  (before 2025-06-30)
 # - create distributions  (before 2025-06-30)
 #   - setup project so it's available through PyPI
 #   - publish on itch.io
