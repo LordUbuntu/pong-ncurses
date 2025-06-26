@@ -181,7 +181,10 @@ if __name__ == '__main__':
     win.border()
 
     # play game
-    pong()
+    try:
+        pong()
+    except:
+        pass
 
     # clean up and end
     curses.curs_set(True)
