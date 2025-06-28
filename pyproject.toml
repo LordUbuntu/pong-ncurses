@@ -36,5 +36,9 @@ maintainers = [
 description = "Pong in Python, now with curses!"
 readme = "README.md"
 license = "MIT"
+
 [project.urls]
 Repository = "https://github.com/LordUbuntu/pong-ncurses"
+
+[project.scripts]
+pong = "npong.__main__:main"

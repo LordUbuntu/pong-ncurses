@@ -5,7 +5,7 @@
 # See:
 #   https://en.wikipedia.org/wiki/Pong
 from math import floor, ceil
-from os import system
+import os
 from random import choice
 from sys import argv
 from time import sleep
@@ -27,125 +27,7 @@ import curses
 # - finished, move on to make ultrapong with pygame or something...
 
 
-def pong():
-    # set paddle size
-    paddle_height = args.paddle if args.paddle else 5
-    if paddle_height >= height // 4:
-        paddle_height = height // 4
-    # [player, opponent]
-    scores = [0, 0]
-    game = True
-    while game:
-        # set initial position and direction at start of each round
-        x, y = width // 2, height // 2
-        dx = choice([-1, 1])
-        dy = choice([-1, 1])
-
-        # y, x
-        player_paddle = [height // 2, 2]
-        opponent_paddle = [height // 2, width - 2]
-
-        # each round
-        while True:
-            # get input
-            key = win.getch()
-            # quit on q key
-            if key == ord('q'):
-                game = False
-                break
-            # move paddle up or down based on input
-            #   move player paddle up
-            if key == ord('w'):
-                if player_paddle[0] > ceil(paddle_height / 2):
-                    player_paddle[0] -= 1
-            #   move player paddle down
-            if key == ord('s'):
-                if player_paddle[0] < height - (ceil(paddle_height / 2) + 1):
-                    player_paddle[0] += 1
-            #   move opponent paddle up
-            if key == ord('i'):
-                if opponent_paddle[0] > ceil(paddle_height / 2):
-                    opponent_paddle[0] -= 1
-            #   move opponent paddle down
-            if key == ord('k'):
-                if opponent_paddle[0] < height - (ceil(paddle_height / 2) + 1):
-                    opponent_paddle[0] += 1
-            # madness mode: move paddles on x plane too!
-            if args.madness:
-                # move player paddle left
-                if key == ord('a'):
-                    if player_paddle[1] > 1:
-                        player_paddle[1] -= 1
-                # move player paddle right
-                if key == ord('d'):
-                    if player_paddle[1] < width - 1:
-                        player_paddle[1] += 1
-                # move opponent paddle left
-                if key == ord('j'):
-                    if opponent_paddle[1] > 1:
-                        opponent_paddle[1] -= 1
-                # move opponent paddle right
-                if key == ord('l'):
-                    if opponent_paddle[1] < width - 1:
-                        opponent_paddle[1] += 1
-
-            # update pong
-            #   update ball position
-            y = y + dy
-            x = x + dx
-            # bounce ball against floor and ceiling
-            if y + dy <= 1 or y + dy >= height - 1:
-                dy = dy * -1
-            # bounce against paddles
-            #   bounce from player paddle
-            if x + dx == player_paddle[1] and y in [*range(player_paddle[0] - floor(paddle_height / 2), player_paddle[0] + ceil(paddle_height / 2))]:
-                dx = dx * -1
-            #   bounce from opponent paddle
-            if x + dx == opponent_paddle[1] and y in [*range(opponent_paddle[0] - floor(paddle_height / 2), opponent_paddle[0] + ceil(paddle_height / 2))]:
-                dx = dx * -1
-
-            # update scores and start next round when hitting walls
-            #   bounce from player paddle
-            #   bounce from opponent paddle
-            #   if on left wall (player, score to opponent)
-            if x <= 1:
-                scores[1] += 1
-                break
-            #   if on right wall (opponent, score to player)
-            if x >= width - 1:
-                scores[0] += 1
-                break
-
-            # render
-            #   clear and draw window
-            win.clear()
-            win.border()
-            #   draw ball
-            win.addch(int(y), int(x), ord(ball_char), curses.color_pair(ball_color))
-            #   draw paddles
-            for player_y in range(player_paddle[0] - floor(paddle_height / 2), player_paddle[0] + ceil(paddle_height / 2)):
-                win.addch(int(player_y), int(player_paddle[1]), ord(paddle_char), curses.color_pair(player_color))
-            for opponent_y in range(opponent_paddle[0] - floor(paddle_height / 2), opponent_paddle[0] + ceil(paddle_height / 2)):
-                win.addch(int(opponent_y), int(opponent_paddle[1]), ord(paddle_char), curses.color_pair(opponent_color))
-            #   write scores
-            win.addstr(int(height // 2), int(width // 8), "player: {}".format(scores[0]), curses.color_pair(player_color))
-            win.addstr(int(height // 2), int(width // 4 * 3), "opponent: {}".format(scores[1]), curses.color_pair(opponent_color))
-            #   show visuals
-            win.refresh()
-
-
-if __name__ == '__main__':
-    # parse input of CLI
-    parser = argparse.ArgumentParser(
-        prog="PONG",
-        description="An NCurses implementation of the classic game PONG.",
-        epilog="Jacobus Burger (2025)"
-    )
-    parser.add_argument("-m", "--madness", action="store_true", help="madness mode")
-    parser.add_argument("-p", "--paddle", type=int, help="paddle size")
-    parser.add_argument("-s", "--speed", type=int, help="refresh rate")
-    args = parser.parse_args()
-
+def pong(madness, paddle, speed):
     # initialize ncurses
     stdscr = curses.initscr()
     curses.curs_set(False)
@@ -170,18 +52,139 @@ if __name__ == '__main__':
     height, width = stdscr.getmaxyx()
     win = curses.newwin(height, width, 0, 0)
     win.keypad(True)
-    win.timeout(args.speed if args.speed else 100)
+    win.timeout(speed if speed else 100)
     win.border()
 
-    # play game
     try:
-        pong()
+        # begin pong
+        # set paddle size based on arg
+        paddle_height = paddle if paddle else 5
+        if paddle_height >= height // 4:
+            paddle_height = height // 4
+        # [player, opponent]
+        scores = [0, 0]
+        game = True
+        while game:
+            # set initial position and direction at start of each round
+            x, y = width // 2, height // 2
+            dx = choice([-1, 1])
+            dy = choice([-1, 1])
+
+            # y, x
+            player_paddle = [height // 2, 2]
+            opponent_paddle = [height // 2, width - 2]
+
+            # each round
+            while True:
+                # get input
+                key = win.getch()
+                # quit on q key
+                if key == ord('q'):
+                    game = False
+                    break
+                # move paddle up or down based on input
+                #   move player paddle up
+                if key == ord('w'):
+                    if player_paddle[0] > ceil(paddle_height / 2):
+                        player_paddle[0] -= 1
+                #   move player paddle down
+                if key == ord('s'):
+                    if player_paddle[0] < height - (ceil(paddle_height / 2) + 1):
+                        player_paddle[0] += 1
+                #   move opponent paddle up
+                if key == ord('i'):
+                    if opponent_paddle[0] > ceil(paddle_height / 2):
+                        opponent_paddle[0] -= 1
+                #   move opponent paddle down
+                if key == ord('k'):
+                    if opponent_paddle[0] < height - (ceil(paddle_height / 2) + 1):
+                        opponent_paddle[0] += 1
+                # madness mode: move paddles on x plane too!
+                if madness:
+                    # move player paddle left
+                    if key == ord('a'):
+                        if player_paddle[1] > 1:
+                            player_paddle[1] -= 1
+                    # move player paddle right
+                    if key == ord('d'):
+                        if player_paddle[1] < width - 1:
+                            player_paddle[1] += 1
+                    # move opponent paddle left
+                    if key == ord('j'):
+                        if opponent_paddle[1] > 1:
+                            opponent_paddle[1] -= 1
+                    # move opponent paddle right
+                    if key == ord('l'):
+                        if opponent_paddle[1] < width - 1:
+                            opponent_paddle[1] += 1
+
+                # update pong
+                #   update ball position
+                y = y + dy
+                x = x + dx
+                # bounce ball against floor and ceiling
+                if y + dy <= 1 or y + dy >= height - 1:
+                    dy = dy * -1
+                # bounce against paddles
+                #   bounce from player paddle
+                if x + dx == player_paddle[1] and y in [*range(player_paddle[0] - floor(paddle_height / 2), player_paddle[0] + ceil(paddle_height / 2))]:
+                    dx = dx * -1
+                #   bounce from opponent paddle
+                if x + dx == opponent_paddle[1] and y in [*range(opponent_paddle[0] - floor(paddle_height / 2), opponent_paddle[0] + ceil(paddle_height / 2))]:
+                    dx = dx * -1
+
+                # update scores and start next round when hitting walls
+                #   bounce from player paddle
+                #   bounce from opponent paddle
+                #   if on left wall (player, score to opponent)
+                if x <= 1:
+                    scores[1] += 1
+                    break
+                #   if on right wall (opponent, score to player)
+                if x >= width - 1:
+                    scores[0] += 1
+                    break
+
+                # render
+                #   clear and draw window
+                win.clear()
+                win.border()
+                #   draw ball
+                win.addch(int(y), int(x), ord(ball_char), curses.color_pair(ball_color))
+                #   draw paddles
+                for player_y in range(player_paddle[0] - floor(paddle_height / 2), player_paddle[0] + ceil(paddle_height / 2)):
+                    win.addch(int(player_y), int(player_paddle[1]), ord(paddle_char), curses.color_pair(player_color))
+                for opponent_y in range(opponent_paddle[0] - floor(paddle_height / 2), opponent_paddle[0] + ceil(paddle_height / 2)):
+                    win.addch(int(opponent_y), int(opponent_paddle[1]), ord(paddle_char), curses.color_pair(opponent_color))
+                #   write scores
+                win.addstr(int(height // 2), int(width // 8), "player: {}".format(scores[0]), curses.color_pair(player_color))
+                win.addstr(int(height // 2), int(width // 4 * 3), "opponent: {}".format(scores[1]), curses.color_pair(opponent_color))
+                #   show visuals
+                win.refresh()
     except:
         pass
-
     # clean up and end
     curses.curs_set(True)
     curses.nocbreak()
     curses.echo()
     curses.endwin()
-    system("clear")
+    os.system("clear") if os.name == "nt" else os.system("cls")
+
+
+
+def main():
+    # parse input of CLI
+    parser = argparse.ArgumentParser(
+        prog="PONG",
+        description="An NCurses implementation of the classic game PONG.",
+        epilog="Jacobus Burger (2025)"
+    )
+    parser.add_argument("-m", "--madness", action="store_true", help="madness mode")
+    parser.add_argument("-p", "--paddle", type=int, help="paddle size")
+    parser.add_argument("-s", "--speed", type=int, help="refresh rate")
+    args = parser.parse_args()
+    pong(args.madness, args.paddle, args.speed)
+
+
+if __name__ == '__main__':
+    main()
