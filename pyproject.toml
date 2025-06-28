@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "npong"
-version = "1"
+version = "1.13"
 requires-python = ">=3.13.3"
 dependencies = ['windows-curses ; platform_system == "Windows"']  # only because windows is troublesome
 keywords = [
