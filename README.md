@@ -6,27 +6,20 @@ The classic game pong with ncurses graphics written in Python 3
 
 Make sure you have Python 3.10 or greater installed on you system.
 
-## Linux
-
-Every dependency is part of the Python 3.10+ standard library, so no installations are required. Just run the script like so:
-
-## Windows
-
-Windows hates playing nice, so the installation is a bit more involved.
-
-Install windows-curses
+Then with Python installed, in your Terminal / Command Line, simply run:
 ```
-pip install windows-curses
+pip install npong
 ```
 
 # Running the game
 
-To run pong, simply run the following from your terminal in the directory that pong.py is located in:
+Simply run
 ```
-python3 pong.py
+pong -h
 ```
+To see usage of the program
 
 # How to play
-- w, s: up, down for player 1
-- i, k: up, down for player 2
+- w, a, s, d: up, left, down, right for player 1
+- i, j, k, l: up, left, down, right for player 2
 - q: quit
