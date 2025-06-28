@@ -159,6 +159,15 @@ def pong(madness, paddle, speed):
                 #   write scores
                 win.addstr(int(height // 2), int(width // 8), "player: {}".format(scores[0]), curses.color_pair(player_color))
                 win.addstr(int(height // 2), int(width // 4 * 3), "opponent: {}".format(scores[1]), curses.color_pair(opponent_color))
+                #   write instructions
+                if madness:
+                    win.addstr(int(2), int(2), "wasd = ^<v>", curses.color_pair(player_color))
+                else:
+                    win.addstr(int(2), int(2), "ws = ^v", curses.color_pair(player_color))
+                if madness:
+                    win.addstr(int(2), int(width - 13), "ijkl = ^<v>", curses.color_pair(opponent_color))
+                else:
+                    win.addstr(int(2), int(width - 9), "ik = ^v", curses.color_pair(opponent_color))
                 #   show visuals
                 win.refresh()
     except:
