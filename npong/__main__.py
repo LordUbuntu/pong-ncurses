@@ -20,6 +20,7 @@ import curses
 # - interestingly, logic lets paddles move on x too. Add as feature activated with "--madness" flag  (before 2025-06-25, added 2025-06-23) 
 # - check it works on other platforms  (before 2025-06-30, done 2025-06-25)
 # TODO:
+# - add instructions (ws == ^v), (ik == ^v)
 # - create distributions  (before 2025-06-30)
 #   - setup project so it's available through PyPI
 #   - publish on itch.io
